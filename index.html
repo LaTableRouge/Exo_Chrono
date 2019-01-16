@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chrono</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+</head>
+<body>
+    <script>
+        showInterface = () => {
+            //console.log dans une variable
+            cl = (e) => {console.log(e)};
+            class Chrono{
+                constructor(x, y, c, b){
+                    this.x=x;
+                    this.y=y;
+                    this.c=c;
+                    this.b=b;
+                }
+                affiche(){
+                    this.div = document.createElement("div");
+                    let div = this.div;
+                        div.style.backgroundColor = this.c;
+                        div.style.borderColor = this.b;
+                        div.style.left = this.x;
+                        div.style.top = this.y;
+                        div.style.width = "200px";
+                        div.style.height = "90px";
+                        document.body.appendChild(div);
+                    let input = document.createElement("input");
+                        input.setAttribute("type", "text");
+                        input.setAttribute("value", "00 : 00 : 00");
+                        input.setAttribute("readOnly", "true");
+                        input.style.textAlign = "center";
+                        div.appendChild(input);
+                    let playBtn = document.createElement("img");
+                        playBtn.src = "img/play-button.png";
+                        playBtn.alt = "play";
+                        div.appendChild(playBtn);
+                    let pauseBtn = document.createElement("img");
+                        pauseBtn.src = "img/pause-button.png";
+                        pauseBtn.alt = "pause";
+                    let stopBtn = document.createElement("img");
+                        stopBtn.src = "img/stop-button.png";
+                        stopBtn.alt = "stop";
+                        div.appendChild(stopBtn);
+                }
+                lecture(){
+                    playBtn.onclick = () =>{
+                        div.removeChild(playBtn);
+                        div.appendChild(pauseBtn);
+                    }
+                }
+                pause(){
+                    pauseBtn.onclick = () =>{
+                        div.removeChild(pauseBtn);
+                        div.appendChild(playBtn);
+                    }
+                }
+                init(){
+
+                }
+            }
+            let chrono1 = new Chrono("100px", "200px", "orange", "black");
+            chrono1.affiche();
+        }
+        onload = showInterface;
+    </script>
+</body>
+</html>
