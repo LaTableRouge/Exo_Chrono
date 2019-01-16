@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <style type="text/css">
+*{
+    box-sizing: border-box;
+}
+
+#chronotime {
+    font-size: 50px;
+}
+.header {
+    background-color: grey;
+    padding: 30px 40px;
+    color: white;
+    text-align: center;
+}
+
+.header:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+input {
+    border: none;
+    width: 33%;
+    padding: 10px;
+    float: left;
+    font-size: 16px;
+}
+input:hover {
+    background-color: #CFCFCF;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+ul li {
+    cursor: pointer;
+    position: relative;
+    padding: 12px 8px 12px 40px;
+    background: #eee;
+    font-size: 18px;
+    transition: 0.2s;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+ul li:nth-child(odd) {
+    background: #f9f9f9;
+}
+
+ul li:hover {
+    background: #ddd;
+}
+.close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 12px 16px 12px 16px;
+}
+
+.close:hover {
+    background-color: #f44336;
+    color: white;
+}
+
+</style>
+
+<script language="JavaScript">
+<!--
+var startTime = 0
+var start = 0
+var end = 0
+var diff = 0
+var timerID = 0
+function chrono(){
+    end = new Date()
+    diff = end - start
+    diff = new Date(diff)
+    var msec = diff.getMilliseconds()
+    var sec = diff.getSeconds()
+    var min = diff.getMinutes()
+    var hr = diff.getHours()-1
+    if (min < 10){
+        min = "0" + min
+    }
+    if (sec < 10){
+        sec = "0" + sec
+    }
+    if(msec < 10){
+        msec = "00" +msec
+    }
+    else if(msec < 100){
+        msec = "0" +msec
+    }
+    document.getElementById("chronotime").innerHTML = hr + ":" + min + ":" + sec + ":" + msec
+    timerID = setTimeout("chrono()", 10)
+}
+function chronoStart(){
+    document.chronoForm.startstop.value = "STOP!"
+    document.chronoForm.startstop.onclick = chronoStop
+    document.chronoForm.reset.onclick = chronoReset
+    start = new Date()
+    chrono()
+}
+function chronoContinue(){
+    document.chronoForm.startstop.value = "STOP!"
+    document.chronoForm.startstop.onclick = chronoStop
+    document.chronoForm.reset.onclick = chronoReset
+    start = new Date()-diff
+    start = new Date(start)
+    chrono()
+}
+function chronoReset(){
+    document.getElementById("chronotime").innerHTML = "0:00:00:000"
+    start = new Date()
+}
+function chronoStopReset(){
+    document.getElementById("chronotime").innerHTML = "0:00:00:000"
+    document.chronoForm.startstop.onclick = chronoStart
+}
+function chronoStop(){
+    document.chronoForm.startstop.value = "START!"
+    document.chronoForm.startstop.onclick = chronoContinue
+    document.chronoForm.reset.onclick = chronoStopReset
+    clearTimeout(timerID)
+}
+//-->
+</script>
+<div class="header"><span id="chronotime">0:00:00:00</span>
+<form name="chronoForm">
+    <input type="button" name="startstop" value="START!" onClick="chronoStart()" />
+    <input type="button" name="save" id="myInput" value="Save" onClick="newElement()" />
+    <input type="button" name="reset" value="Reset" onClick="chronoReset()" />
+</form>
+</div>
+<ul id="myUL">
+    <li>0:00:00:000</li>
+</ul>
+
+<script type="text/javascript">
+    var myNodelist = document.getElementsByTagName("LI");
+var i;
+for (i = 0; i < myNodelist.length; i++) {
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "close";
+  span.appendChild(txt);
+  myNodelist[i].appendChild(span);
+}
+
+// Bouton close onclick
+var close = document.getElementsByClassName("close");
+var i;
+for (i = 0; i < close.length; i++) {
+  close[i].onclick = function() {
+    var div = this.parentElement;
+    div.style.display = "none";
+  }
+}
+function newElement() {
+  var li = document.createElement("li");
+  var value = document.getElementById("chronotime").innerHTML;
+  var t = document.createTextNode(value);
+
+  li.appendChild(t);
+
+  document.getElementById("myUL").appendChild(li);
+
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "close";
+  span.appendChild(txt);
+  li.appendChild(span);
+
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+      var div = this.parentElement;
+      div.style.display = "none";
+    }
+  }
+} 
+</script>  
+</body>
+</html>
