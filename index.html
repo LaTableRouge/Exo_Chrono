@@ -23,11 +23,12 @@
                     this.div = document.createElement("div");
                     let div = this.div;
                         div.style.backgroundColor = this.c;
-                        div.style.borderColor = this.b;
+                        div.style.border = `1px solid ${this.b}`;
                         div.style.left = this.x;
                         div.style.top = this.y;
                         div.style.width = "200px";
                         div.style.height = "90px";
+                        div.style.display = "flex";
                         document.body.appendChild(div);
                     let input = document.createElement("input");
                         input.setAttribute("type", "text");
@@ -46,18 +47,21 @@
                         stopBtn.src = "img/stop-button.png";
                         stopBtn.alt = "stop";
                         div.appendChild(stopBtn);
-                }
-                lecture(){
                     playBtn.onclick = () =>{
                         div.removeChild(playBtn);
                         div.appendChild(pauseBtn);
-                    }
-                }
-                pause(){
+                        }
                     pauseBtn.onclick = () =>{
                         div.removeChild(pauseBtn);
                         div.appendChild(playBtn);
-                    }
+                        }
+                }
+                
+                lecture(){
+                    
+                }
+                pause(){
+                    
                 }
                 init(){
 
