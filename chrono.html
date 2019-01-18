@@ -1,193 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chrono</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 </head>
 <body>
-    <style type="text/css">
-*{
-    box-sizing: border-box;
-}
+    <script>
+        showInterface = () => {
+            //console.log dans une variable
+            cl = (e) => {console.log(e)};
+            //variables globales
+            let startTime = 0;
+            let start = 0;
+            let end = 0;
+            let diff = 0;
+            let timerID = 0;
 
-#chronotime {
-    font-size: 50px;
-}
-.header {
-    background-color: grey;
-    padding: 30px 40px;
-    color: white;
-    text-align: center;
-}
+            class Chrono{
+                constructor(x, y, c, b){
+                    this.x = x;
+                    this.y = y;
+                    this.c = c;
+                    this.b = b;
 
-.header:after {
-    content: "";
-    display: table;
-    clear: both;
-}
+                    this.div = document.createElement("div");
+                    let div = this.div;
+                        div.style.backgroundColor = this.c;
+                        div.style.border = `1px solid ${this.b}`;
+                        div.style.borderRadius = '20px';
+                        div.style.left = this.x;
+                        div.style.top = this.y;
+                        div.style.width = "200px";
+                        div.style.height = "80px";
+                        div.style.position = "absolute";
 
-input {
-    border: none;
-    width: 33%;
-    padding: 10px;
-    float: left;
-    font-size: 16px;
-}
-input:hover {
-    background-color: #CFCFCF;
-}
-ul {
-    margin: 0;
-    padding: 0;
-}
+                    this.input = document.createElement("input");
+                    let input = this.input;
+                        input.setAttribute("type", "text");
+                        input.setAttribute("value", "00:00:00:000");
+                        input.setAttribute("readOnly", "true");
+                        input.style.textAlign = "center";
+                        input.style.display="block";
+                        input.style.margin = "0 auto";
+                        input.style.marginTop = "10px";
+                        
+                    this.divButtons = document.createElement("div");
+                    let divButtons = this.divButtons;
+                        divButtons.style.display = "flex";
+                        divButtons.style.justifyContent = "space-evenly";
+                        divButtons.style.marginTop = "20px";
 
-ul li {
-    cursor: pointer;
-    position: relative;
-    padding: 12px 8px 12px 40px;
-    background: #eee;
-    font-size: 18px;
-    transition: 0.2s;
+                    this.playBtn = document.createElement("img");
+                    let playBtn = this.playBtn;  
+                        playBtn.src = "img/play-button.png";
+                        playBtn.alt = "play";
 
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+                        
+                    this.pauseBtn = document.createElement("img");
+                    let pauseBtn = this.pauseBtn
+                        pauseBtn.src = "img/pause-button.png";
+                        pauseBtn.alt = "pause";
 
-ul li:nth-child(odd) {
-    background: #f9f9f9;
-}
+                    this.stopBtn = document.createElement("img");
+                    let stopBtn = this.stopBtn;
+                        stopBtn.src = "img/stop-button.png";
+                        stopBtn.alt = "stop";
 
-ul li:hover {
-    background: #ddd;
-}
-.close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 12px 16px 12px 16px;
-}
+                    this.playBtn.onclick = () => { this.chronoStart() };
+                    this.stopBtn.onclick = () => { this.chronoReset() };
+                }
+                affiche(){
+                    this.div.appendChild(this.input);
+                    this.divButtons.appendChild(this.playBtn);
+                    this.divButtons.appendChild(this.stopBtn);
+                    this.div.appendChild(this.divButtons);
+                    document.body.appendChild(this.div);
+                }
+                chrono(){
+                    end = new Date();
+                    diff = end - start;
+                    diff = new Date(diff);
+                    var msec = diff.getMilliseconds();
+                    var sec = diff.getSeconds();
+                    var min = diff.getMinutes();
+                    var hr = diff.getHours()-1;
+                    if (min < 10){
+                        min = "0" + min;
+                    }
+                    if (sec < 10){
+                        sec = "0" + sec;
+                    }
+                    if(msec < 10){
+                        msec = "00" +msec;
+                    }
+                    else if(msec < 100){
+                        msec = "0" +msec;
+                    }
+                        this.input.value = hr + ":" + min + ":" + sec + ":" + msec;
+                        timerID = setTimeout(()=> {this.chrono()}, 10);
+                }
+                chronoStart(){
+                    this.divButtons.removeChild(this.playBtn);
+                    this.divButtons.removeChild(this.stopBtn);
+                    this.divButtons.appendChild(this.pauseBtn);
+                    this.divButtons.appendChild(this.stopBtn);
+                    this.pauseBtn.onclick = () => { this.chronoStop() };
+                    this.stopBtn.onclick = () => { this.chronoReset() };
+                    start = new Date();
+                    this.chrono();
+                }
+                chronoContinue(){
+                    this.divButtons.removeChild(this.playBtn);
+                    this.divButtons.removeChild(this.stopBtn);
+                    this.divButtons.appendChild(this.pauseBtn);
+                    this.divButtons.appendChild(this.stopBtn);
+                    this.pauseBtn.onclick = () => { this.chronoStop() };
+                    this.stopBtn.onclick = () => { this.chronoReset() } ;
+                    start = new Date()-diff;
+                    start = new Date(start);
+                    this.chrono()
+                }
+                chronoReset(){
+                    this.input.value = "0:00:00:000";
+                    start = new Date();
+                }
+                chronoStopReset(){
+                    this.input.value = "0:00:00:000";
+                    this.playBtn.onclick = () => { this.chronoStart() };
+                }
+                chronoStop(){
+                    this.divButtons.removeChild(this.pauseBtn);
+                    this.divButtons.removeChild(this.stopBtn);
+                    this.divButtons.appendChild(this.playBtn);
+                    this.divButtons.appendChild(this.stopBtn);
+                    this.playBtn.onclick = () => { this.chronoContinue() };
+                    this.stopBtn.onclick = () => { this.chronoStopReset() };
+                    clearTimeout(timerID);
+                    }
+            }
 
-.close:hover {
-    background-color: #f44336;
-    color: white;
-}
-
-</style>
-
-<script language="JavaScript">
-<!--
-var startTime = 0
-var start = 0
-var end = 0
-var diff = 0
-var timerID = 0
-function chrono(){
-    end = new Date()
-    diff = end - start
-    diff = new Date(diff)
-    var msec = diff.getMilliseconds()
-    var sec = diff.getSeconds()
-    var min = diff.getMinutes()
-    var hr = diff.getHours()-1
-    if (min < 10){
-        min = "0" + min
-    }
-    if (sec < 10){
-        sec = "0" + sec
-    }
-    if(msec < 10){
-        msec = "00" +msec
-    }
-    else if(msec < 100){
-        msec = "0" +msec
-    }
-    document.getElementById("chronotime").innerHTML = hr + ":" + min + ":" + sec + ":" + msec
-    timerID = setTimeout("chrono()", 10)
-}
-function chronoStart(){
-    document.chronoForm.startstop.value = "STOP!"
-    document.chronoForm.startstop.onclick = chronoStop
-    document.chronoForm.reset.onclick = chronoReset
-    start = new Date()
-    chrono()
-}
-function chronoContinue(){
-    document.chronoForm.startstop.value = "STOP!"
-    document.chronoForm.startstop.onclick = chronoStop
-    document.chronoForm.reset.onclick = chronoReset
-    start = new Date()-diff
-    start = new Date(start)
-    chrono()
-}
-function chronoReset(){
-    document.getElementById("chronotime").innerHTML = "0:00:00:000"
-    start = new Date()
-}
-function chronoStopReset(){
-    document.getElementById("chronotime").innerHTML = "0:00:00:000"
-    document.chronoForm.startstop.onclick = chronoStart
-}
-function chronoStop(){
-    document.chronoForm.startstop.value = "START!"
-    document.chronoForm.startstop.onclick = chronoContinue
-    document.chronoForm.reset.onclick = chronoStopReset
-    clearTimeout(timerID)
-}
-//-->
-</script>
-<div class="header"><span id="chronotime">0:00:00:00</span>
-<form name="chronoForm">
-    <input type="button" name="startstop" value="START!" onClick="chronoStart()" />
-    <input type="button" name="save" id="myInput" value="Save" onClick="newElement()" />
-    <input type="button" name="reset" value="Reset" onClick="chronoReset()" />
-</form>
-</div>
-<ul id="myUL">
-    <li>0:00:00:000</li>
-</ul>
-
-<script type="text/javascript">
-    var myNodelist = document.getElementsByTagName("LI");
-var i;
-for (i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
-}
-
-// Bouton close onclick
-var close = document.getElementsByClassName("close");
-var i;
-for (i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
-  }
-}
-function newElement() {
-  var li = document.createElement("li");
-  var value = document.getElementById("chronotime").innerHTML;
-  var t = document.createTextNode(value);
-
-  li.appendChild(t);
-
-  document.getElementById("myUL").appendChild(li);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    }
-  }
-} 
-</script>  
+            let chrono1 = new Chrono("100px", "200px", "orange", "black");
+            chrono1.affiche();
+        }
+        onload = showInterface;
+    </script>
 </body>
 </html>

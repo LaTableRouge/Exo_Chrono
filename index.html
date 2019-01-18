@@ -12,116 +12,133 @@
         showInterface = () => {
             //console.log dans une variable
             cl = (e) => {console.log(e)};
+            //variables globales
+            let startTime = 0;
+            let start = 0;
+            let end = 0;
+            let diff = 0;
+            let timerID = 0;
+
             class Chrono{
                 constructor(x, y, c, b){
                     this.x=x;
                     this.y=y;
                     this.c=c;
                     this.b=b;
-                }
-                affiche(){
-                    /*div generale*/
+
                     this.div = document.createElement("div");
                     let div = this.div;
                         div.style.backgroundColor = this.c;
-                        div.style.border = `2px solid ${this.b}`;
+                        div.style.border = `1px solid ${this.b}`;
+                        div.style.borderRadius = '20px';
                         div.style.left = this.x;
                         div.style.top = this.y;
+                        div.style.width = "200px";
+                        div.style.height = "80px";
                         div.style.position = "absolute";
-                        div.style.width = "160px";
-                        div.style.height = "60px";
-                        document.body.appendChild(div);
-                    /*div input*/
-                    let divI = document.createElement("div");
-                        div.appendChild(divI);
-                    /*input*/
-                    let input = document.createElement("input");
-                        input.setAttribute("type", "text");
-                        input.setAttribute("value", "00 : 00 : 10");
-                        input.setAttribute("readOnly", "true");
 
+                    this.input = document.createElement("input");
+                    let input = this.input;
+                        input.setAttribute("type", "text");
+                        input.setAttribute("value", "00 : 00 : 00");
+                        input.setAttribute("readOnly", "true");
                         input.style.textAlign = "center";
                         input.style.display="block";
                         input.style.margin = "0 auto";
-                        divI.appendChild(input);
-                    /*br*/
-                    let br = document.createElement("br");
-                        div.appendChild(br);
-                    /*div button*/
-                    let divB = document.createElement("div");
+                        input.style.marginTop = "10px";
+                        
+                    this.divB = document.createElement("div");
+                    let divB = this.divB;
                         divB.style.display = "flex";
                         divB.style.justifyContent = "space-evenly";
-                        div.appendChild(divB);
-                    /*img stop*/
-                    let stopBtn = document.createElement("img");
-                        stopBtn.src = "img/stop-button.png";
-                        stopBtn.alt = "stop";
-                        divB.appendChild(stopBtn);
-                    /*img play*/
-                    let playBtn = document.createElement("img");
+                        divB.style.marginTop = "20px";
+
+                    this.playBtn = document.createElement("img");
+                    let playBtn = this.playBtn;  
                         playBtn.src = "img/play-button.png";
                         playBtn.alt = "play";
-                        divB.appendChild(playBtn);
-                    /*img pause*/
-                    let pauseBtn = document.createElement("img");
+
+                        
+                    this.pauseBtn = document.createElement("img");
+                    let pauseBtn = this.pauseBtn
                         pauseBtn.src = "img/pause-button.png";
                         pauseBtn.alt = "pause";
-                    /*play-pause Event*/
-                    playBtn.onclick = () =>{
-                        divB.removeChild(playBtn);
-                        divB.appendChild(pauseBtn);
-                        }
-                    pauseBtn.onclick = () =>{
-                        divB.removeChild(pauseBtn);
-                        divB.appendChild(playBtn);
-                        }
-                    stopBtn.onclick = () =>{
-                        init();
-                        }
-                }       
-                lecture(){
-                    let startTime = 0;
-                    let start = 0;
-                    let end = 0;
-                    let diff = 0;
-                    let timerID = 0;
-                    chrono = () =>{
-                        end = new Date();
-                        diff = end - start;
-                        diff = new Date(diff);
-                        let sec = diff.getSeconds();
-                        let min = diff.getMinutes();
-                        let hr = diff.getHours()-1;
-                        if (min < 10){
-                            min = "0" + min;
-                        }
-                        if (sec < 10){
-                            sec = "0" + sec;
-                        }
-                        document.getElementsByTagName("input").innerHTML = `${hr} : ${min} : ${sec}`;
-                        timerID = setInterval("chrono()", 10);
-                    }
-                    start = new Date();
-                    chrono();
+
+                    this.stopBtn = document.createElement("img");
+                    let stopBtn = this.stopBtn;
+                        stopBtn.src = "img/stop-button.png";
+                        stopBtn.alt = "stop";
+
+                    this.playBtn.onclick = () => { this.lecture() };
+                    this.stopBtn.onclick = () => { this.init() };
                 }
+                affiche(){
+                    document.body.appendChild(this.div);
+                    this.div.appendChild(this.input);
+                    this.div.appendChild(this.divB);
+                    this.divB.appendChild(this.playBtn);
+                    this.divB.appendChild(this.stopBtn);
+                }
+                chrono(){
+                    end = new Date();
+                    diff = end - start;
+                    diff = new Date(diff);
+                    let sec = diff.getSeconds();
+                    let min = diff.getMinutes();
+                    let hr = diff.getHours()-1;
+                    if (min < 10){
+                        min = "0" + min;
+                    }
+                    if (sec < 10){
+                        sec = "0" + sec;
+                    }
+                        this.input.value = `${hr} : ${min} : ${sec}`;
+                        timerID = setTimeout(()=> {this.chrono()}, 10);
+                }       
                 pause(){
-                    document.div.divB.pauseBtn.onclick = lecture;
-                    divB.removeChild(playBtn);
-                    divB.appendChild(pauseBtn);
+                    this.divB.removeChild(this.pauseBtn);
+                    this.divB.removeChild(this.stopBtn);
+                    this.divB.appendChild(this.playBtn);
+                    this.divB.appendChild(this.stopBtn);
+                    this.playBtn.onclick = () => { this.continue() };
+                    this.stopBtn.onclick = () => { this.init() };
                     clearInterval(timerID);
                 }
+                lecture(){
+                    this.divB.removeChild(this.playBtn);
+                    this.divB.removeChild(this.stopBtn);
+                    this.divB.appendChild(this.pauseBtn);
+                    this.divB.appendChild(this.stopBtn);
+                    this.pauseBtn.onclick = () => { this.pause() };
+                    this.stopBtn.onclick = () => { this.init() };
+                    start = new Date();
+                    this.chrono();
+                }
+                continue(){
+                    this.divB.removeChild(this.playBtn);
+                    this.divB.removeChild(this.stopBtn);
+                    this.divB.appendChild(this.pauseBtn);
+                    this.divB.appendChild(this.stopBtn);
+                    this.pauseBtn.onclick = () => { this.pause() };
+                    this.stopBtn.onclick = () => { this.init() } ;
+                    start = new Date()-diff;
+                    start = new Date(start);
+                    this.chrono()
+                }
                 init(){
-                    let input = document.getElementsByTagName("input");
-                    if(input.value === "00 : 00 : 00"){
-                        document.div.divB.stopBtn.onclick = lecture;
-                    }else{
-                        input.innerHTML = "00 : 00 : 00";
+                    if(this.input.value === "00 : 00 : 00"){
+                        this.pause();
                         start = new Date();
-                    }  
+                    }else{
+                        this.input.value = "00 : 00 : 00";
+                        this.playBtn.onclick = () => { this.lecture() };
+                    }
                 }
             }
             let chrono1 = new Chrono("100px", "200px", "orange", "black");
             chrono1.affiche();
+            let chrono2 = new Chrono("500px", "200px", "green", "black");
+            chrono2.affiche();
         }
         onload = showInterface;
     </script>
