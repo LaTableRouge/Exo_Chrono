@@ -1,15 +1,16 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Chrono - Exercice 3-4</title>
+    <title>Chrono - Exercice 1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 </head>
 <body>
     <script>
-        showInterface = () => {
+                showInterface = () => {
             //console.log dans une variable
             cl = (e) => {console.log(e)};
             //variables globales
@@ -169,6 +170,9 @@
                     let closeBtn = this.closeBtn;
                         closeBtn.src = "img/close-button.png";
                         closeBtn.alt = "stop";
+                        closeBtn.style.position = "absolute";
+                        closeBtn.style.top = "0px";
+                        closeBtn.style.right = "0px";
                     this.div.appendChild(this.closeBtn);
                     this.closeBtn.onclick = () => { this.close() };
                 };
@@ -178,28 +182,76 @@
                     document.body.removeChild(this.div);
                 };
             };
-
+            
 
             class ChronoTer extends ChronoBis{
                 affiche(){
                     super.affiche();
-                    this.div.onmouseover = () => { this.cursor() };
+                    this.div.onmouseover = () => { this.cursor(); };
+                    this.div.onclick = () => { this.drag(); };
                 }
                 cursor(){
                     //change le curseur en croix
                     this.div.style.cursor = "all-scroll";
                 }
+                drag(){
+                    //drag & drop de la div
+                    this.div.onmousedown = (e) => {
+                        this.x = e.clientX;
+                        this.y = e.clientY;
+                        this.div.onmouseup = () => {
+                            this.div.onmouseup = null;
+                            this.div.onmousemove = null;
+                        };
+                        this.div.onmousemove = (e) => {
+                            let pos1 = this.x - e.clientX;
+                            let pos2 = this.y - e.clientY;
+                            this.x = e.clientX;
+                            this.y = e.clientY;
+                            this.div.style.top = (this.div.offsetTop - pos2) + "px";
+                            this.div.style.left = (this.div.offsetLeft - pos1) + "px";
+                        };
+                    };
+                };
             };
 
+            // Chrono.prototype = {
+            //     affiche(){
+            //         super.affiche();
+            //         this.div.onmouseover = () => { this.drag() };
+            //     },
+            //     drag(){
+            //         //drag & drop de la div
+            //         this.div.onmousedown = (e) => {
+            //         this.x = e.clientX;
+            //         this.y = e.clientY;
+            //         this.div.onmouseup = () => {
+            //             this.div.onmouseup = null;
+            //             this.div.onmousemove = null;
+            //         };
+            //             this.div.onmousemove = (e) => {
+            //                 let pos1 = this.x - e.clientX;
+            //                 let pos2 = this.y - e.clientY;
+            //                 this.x = e.clientX;
+            //                 this.y = e.clientY;
+            //                 this.div.style.top = (this.div.offsetTop - pos2) + "px";
+            //                 this.div.style.left = (this.div.offsetLeft - pos1) + "px";
+            //             };
+            //         };
+            //     }
+            // }
             
+
             let chrono1 = new Chrono("100px", "200px", "orange", "black");
             chrono1.affiche();
             let chrono2 = new ChronoBis("500px", "200px", "green", "black");
             chrono2.affiche();
             let chrono3 = new ChronoTer("900px", "200px", "blue", "grey");
             chrono3.affiche();
+            let chrono4 = new ChronoTer("1300px", "200px", "purple", "blue");
+            chrono4.affiche();
         };
         onload = showInterface;
-    </script>
+</script>
 </body>
 </html>
