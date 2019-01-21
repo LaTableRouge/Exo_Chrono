@@ -75,7 +75,6 @@
                     this.stopBtn.onclick = () => { this.init() };
                     this.playBtn.onclick = () => { this.lecture() };;
                 }
-
                 //methode affiche qui display le chrono
                 affiche(){
                     document.body.appendChild(this.div);
@@ -84,7 +83,6 @@
                     this.divB.appendChild(this.playBtn);
                     this.divB.appendChild(this.stopBtn);
                 }
-
                 //methode chrono qui contient l'algo   
                 chrono(){
                     end = new Date();
@@ -102,7 +100,6 @@
                         this.input.value = `${hr} : ${min} : ${sec}`;
                         timerID = setTimeout(()=> {this.chrono()}, 10);
                 }
-
                 //methode pause qui stop le chrono      
                 pause(){
                     this.divB.removeChild(this.pauseBtn);
@@ -113,7 +110,6 @@
                     this.stopBtn.onclick = () => { this.init() };
                     clearInterval(timerID);
                 }
-
                 //methode lecture qui met en marche le chrono
                 lecture(){
                     this.divB.removeChild(this.playBtn);
@@ -126,7 +122,6 @@
                     start = new Date();
                     this.chrono();
                 }
-
                 //methode continue qui remet en marche le chrono   
                 continue(){
                     this.divB.removeChild(this.playBtn);
@@ -140,7 +135,6 @@
                     start = new Date(start);
                     this.chrono()
                 }
-
                 //methode init qui reset le chrono   
                 init(){
                     if(this.input.value === "00 : 00 : 00"){
