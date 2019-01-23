@@ -167,6 +167,8 @@
                         closeBtn.style.right = "0px";
                     this.div.appendChild(this.closeBtn);
                     this.closeBtn.onclick = () => { this.close() };
+                    //change le curseur en pointer
+                    this.closeBtn.onmouseover = () => { this.closeBtn.style.cursor = "pointer";}
                 };
                 //methode close qui supprime le chrono
                 close(){
