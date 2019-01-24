@@ -198,9 +198,9 @@
                         this.y = e.clientY;
                         this.div.onmouseup = () => {
                             this.div.onmouseup = null;
-                            this.div.onmousemove = null;
+                            window.onmousemove = null;
                         };
-                        this.div.onmousemove = (e) => {
+                        window.onmousemove = (e) => {
                             let pos1 = this.x - e.clientX;
                             let pos2 = this.y - e.clientY;
                             this.x = e.clientX;
