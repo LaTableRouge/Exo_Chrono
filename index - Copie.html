@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Event</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script>
+        showInterface = () => {
+            //console.log dans une variable
+            cl = (e) => {console.log(e)};
+
+            main.style.display = "flex";
+            main.style.justifyContent = "space-around";
+
+            /*Cas N°1*/
+            //Display
+            a.style.border = "2px solid black";
+            a.style.backgroundColor = "grey";
+            a.style.width = "250px";
+            a.style.height = "250px";
+            b.style.backgroundColor = "green";
+            b.style.width = "100px";
+            b.style.height = "100px";
+            //Events
+            a.addEventListener("click",(e)=>{alert('gris')}, false);
+            b.addEventListener("click",(e)=>{alert('vert')}, false);
+
+            /*Cas N°2*/
+            //Display
+            c.style.border = "2px solid black";
+            c.style.backgroundColor = "grey";
+            c.style.width = "250px";
+            c.style.height = "250px";
+            d.style.backgroundColor = "green";
+            d.style.width = "100px";
+            d.style.height = "100px";
+            //Events
+            c.addEventListener("click",(e)=>{alert('gris')}, true);
+            d.addEventListener("click",(e)=>{alert('vert')}, false);
+
+            /*Cas N°3*/
+            //Display
+            e.style.border = "2px solid black";
+            e.style.backgroundColor = "grey";
+            e.style.width = "250px";
+            e.style.height = "250px";
+            f.style.backgroundColor = "green";
+            f.style.width = "100px";
+            f.style.height = "100px";
+            //Events
+            e.addEventListener("click",(e)=>{alert('gris')}, false);
+            f.addEventListener("click",(e)=>{alert('vert'); e.stopPropagation()}, false);
+
+            /*Cas N°4*/
+            //Display
+            g.style.border = "2px solid black";
+            g.style.backgroundColor = "grey";
+            g.style.width = "250px";
+            g.style.height = "250px";
+            g.style.position = "absolute";
+            h.style.backgroundColor = "green";
+            h.style.width = "100px";
+            h.style.height = "100px";
+            //Events
+            h.addEventListener("mousedown",(e)=>{alert('vert'); e.stopPropagation()}, true);
+            g.addEventListener("mousedown",gMouseD = (e)=>{
+                dx = e.clientX;
+                dy = e.clientY;
+                g.addEventListener("mouseup",gMouseU = ()=>{
+                    g.removeEventListener("mouseup",gMouseU, false);
+                    window.removeEventListener("mousemove",wMouseM, false);
+                }, false);
+                window.addEventListener("mousemove",wMouseM = (e)=>{
+                    let pos1 = dx - e.clientX;
+                    let pos2 = dy - e.clientY;
+                    dx = e.clientX;
+                    dy = e.clientY;
+                    g.style.top = (g.offsetTop - pos2) + "px";
+                    g.style.left = (g.offsetLeft - pos1) + "px";
+                }, false);
+            }, false);
+            
+        };
+        onload = showInterface;
+    </script>
+</head>
+<body>
+    <main id="main">
+        <div id="a">
+            <div id="b">1er cas</div>
+        </div>
+        <div id="c">
+            <div id="d">2nd cas</div>
+        </div>
+        <div id="e">
+            <div id="f">3e cas</div>
+        </div>
+        <div id="g">
+            <div id="h">4e cas</div>
+        </div>
+    </main>
+</body>
+</html>
